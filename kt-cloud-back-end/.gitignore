@@ -3,7 +3,24 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+!gradlew
+!gradlew.bat
+!gradle/wrapper/gradle-wrapper.properties
 .kotlin
+.gradle/
+out/
+bin/
+target/
+*.class
+*.log
+logs/
+hs_err_pid*
+replay_pid*
+*.hprof
+.env
+*.env
+*.local.*
+*.secret.*
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -13,9 +30,10 @@ build/
 *.iws
 *.iml
 *.ipr
-out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+.idea/
+.settings/
 
 ### Eclipse ###
 .apt_generated
@@ -25,7 +43,6 @@ out/
 .settings
 .springBeans
 .sts4-cache
-bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
@@ -41,3 +58,4 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+Thumbs.db
