@@ -19,9 +19,25 @@ public class LedgerEntry {
 		// 외부에서 수정할 수 없도록 새로운 Map으로 복사하여 저장
 		this.soldProducts = Map.copyOf(soldProducts);
 	}
+	// total Sales Amount, 하나 팔때마다 하나 추가
+	// 2025-10-27
+	// 포카리 1개 1200원에 팜
+	// 바운더리 컨테스트가 불명확하가. 레저와 레저엔트리와.
+	// 레저가 장부를 뜻한느 거라면 이 엔트리가 굳이 필요했을까?
+	// 강사님이었다면 엔트리를 없애고 하나로 합쳤을것이다.
+	// soldProducts.put(date.toString(), amount)
 
-	public LocalDate getDate() { return date; }
-	public int getAmount() { return amount; }
+	// public void record(String name, int amount, Map<String, Integer> soldProducts){
+	// 	soldProducts.put(name, amount);
+	// }
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
 
 	/**
 	 * 상품별 판매 기록을 반환한다.
