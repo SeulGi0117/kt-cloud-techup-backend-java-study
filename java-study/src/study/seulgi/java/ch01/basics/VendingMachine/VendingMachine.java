@@ -26,7 +26,8 @@ public class VendingMachine {
 
 	public boolean addStock(String code, int qty) {
 		Inventory slot = slots.get(code);
-		if (slot == null) return false;
+		if (slot == null)
+			return false;
 		slot.add(qty);
 		return true;
 	}
@@ -39,11 +40,14 @@ public class VendingMachine {
 		return Collections.unmodifiableCollection(slots.values());
 	}
 
-	public boolean isPoweredOn() { return poweredOn; }
+	public boolean isPoweredOn() {
+		return poweredOn;
+	}
 
 	public void insert(int amount) {
 		ensureOn();
-		if (amount <= 0) throw new IllegalArgumentException("투입 금액은 1원 이상이어야 합니다.");
+		if (amount <= 0)
+			throw new IllegalArgumentException("투입 금액은 1원 이상이어야 합니다.");
 		inserted += amount;
 	}
 
@@ -61,7 +65,7 @@ public class VendingMachine {
 
 		// 잔액 표시 (필요할 때만)
 		if (showBalance) {
-			sb.append(String.format("입금 잔액: %,d원\n", inserted));
+			sb.append(String.format("투입 금액: %,d원\n", inserted));
 		}
 		return sb.toString();
 	}
@@ -69,8 +73,10 @@ public class VendingMachine {
 	public DispenseResult select(String code) {
 		ensureOn();
 		Inventory slot = slots.get(code);
-		if (slot == null) return DispenseResult.fail("존재하지 않는 코드입니다.");
-		if (!slot.hasStock()) return DispenseResult.fail("재고가 부족합니다!");
+		if (slot == null)
+			return DispenseResult.fail("존재하지 않는 코드입니다.");
+		if (!slot.hasStock())
+			return DispenseResult.fail("재고가 부족합니다!");
 
 		Product product = slot.getProduct();
 		int price = product.getPrice();
@@ -95,10 +101,13 @@ public class VendingMachine {
 		return out;
 	}
 
-	public void togglePower() { poweredOn = !poweredOn; }
-	 // 일일 매출을 수금하고 장부에 상세 내역을 기록한다.
-	 // 기록 후 일일 데이터는 초기화 해야한다.
-	 	public int collectSalesAndRecord() {
+	public void togglePower() {
+		poweredOn = !poweredOn;
+	}
+
+	// 일일 매출을 수금하고 장부에 상세 내역을 기록한다.
+	// 기록 후 일일 데이터는 초기화 해야한다.
+	public int collectSalesAndRecord() {
 		LocalDate today = LocalDate.now(KST);
 		int collected = salesToday;
 
@@ -139,9 +148,15 @@ public class VendingMachine {
 	}
 
 	private void ensureOn() {
-		if (!poweredOn) throw new IllegalStateException("자판기가 꺼져 있습니다.");
+		if (!poweredOn)
+			throw new IllegalStateException("자판기가 꺼져 있습니다.");
 	}
 
-	public int getInserted() { return inserted; }
-	public int getSalesToday() { return salesToday; }
+	public int getInserted() {
+		return inserted;
+	}
+
+	public int getSalesToday() {
+		return salesToday;
+	}
 }
