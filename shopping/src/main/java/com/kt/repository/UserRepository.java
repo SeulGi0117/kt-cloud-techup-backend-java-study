@@ -19,6 +19,9 @@ public class UserRepository {
 		jdbcTemplate.update(sql, user.getLoginId(), user.getPassword(), user.getName(), user.getBirthday());
 		System.out.println("save user: "+user.toString());// 백엔드에서 도메인이란? 주소체계가 아니라 도메인(비지니스 모델)
 
-
+	}
+	public Long selectMaxId(){
+		var sql = "SELECT MAX(id) FROM USER;";
+		return jdbcTemplate.queryForObject(sql, Long.class);
 	}
 }

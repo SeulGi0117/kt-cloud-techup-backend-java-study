@@ -24,4 +24,6 @@ public class User {
 	private LocalDateTime createAt;
 	private LocalDateTime updateAt;
 
+	public User(long id, String loginId, String password, String name, String email, String mobile, String gender, LocalDate birthday, LocalDateTime now, LocalDateTime now1) {
+	}
 }
