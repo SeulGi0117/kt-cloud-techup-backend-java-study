@@ -1,6 +1,7 @@
 package com.kt.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.data.relational.core.dialect.LockClause;
 
@@ -12,8 +13,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+	private Long id;
 	private String loginId;
 	private String password;
 	private String name;
+	private String email;
+	private String mobile;
+	private Gender gender;
 	private LocalDate birthday;
+	private LocalDateTime createAt;
+	private LocalDateTime updateAt;
+
 }
