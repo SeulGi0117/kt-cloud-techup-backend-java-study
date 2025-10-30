@@ -22,6 +22,7 @@ public class UserRepository {
 	}
 	public Long selectMaxId(){
 		var sql = "SELECT MAX(id) FROM USER;";
-		return jdbcTemplate.queryForObject(sql, Long.class);
+		var maxId = jdbcTemplate.queryForObject(sql, Long.class);
+		return maxId == null ? 0L :maxId;
 	}
 }
