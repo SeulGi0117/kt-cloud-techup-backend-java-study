@@ -28,7 +28,7 @@ public record UserCreateRequest(
 	@Pattern(regexp = "^\\d{1,2}-\\d{3,4}-\\d{4}$")
 	String mobile,
 	@NotNull		// " ", "남자" 객체 이넘은 애초에 이런거 호환이 안됨. 그래서 null인 경우만 방어한다.
-	String gender,
+	Gender gender,
 	@NotNull 		//20020117 이렇게 보내면 오류나서 2002-01-17 이렇게 들어오게 함. 그래서 notnull 붙임
 	LocalDate birthday
 ) {}
