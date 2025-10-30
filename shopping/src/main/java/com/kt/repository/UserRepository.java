@@ -24,7 +24,7 @@ public class UserRepository {
 			mobile,
 			email,
 			gender,
-			createAt
+			createdAt
 			updateAt
 			) VALUES (?, ?, ?, ?,?,?,?,?,?,?)
 		""";
@@ -39,7 +39,7 @@ public class UserRepository {
 			user.getMobile(),
 			user.getEmail(),
 			user.getGender(),
-			user.getCreateAt(),
+			user.getCreatedAt(),
 			user.getUpdateAt()
 		);
 		System.out.println("save user: " + user.toString());// 백엔드에서 도메인이란? 주소체계가 아니라 도메인(비지니스 모델)
