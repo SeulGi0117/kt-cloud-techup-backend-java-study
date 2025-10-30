@@ -21,7 +21,7 @@ public class User {
 	private String mobile;
 	private Gender gender;
 	private LocalDate birthday;
-	private LocalDateTime createAt;
+	private LocalDateTime createdAt;
 	private LocalDateTime updateAt;
 
 	public User(long id, String loginId, String password, String name, String email, String mobile, String gender, LocalDate birthday, LocalDateTime now, LocalDateTime now1) {
