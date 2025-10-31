@@ -45,10 +45,9 @@ public class Machine {
 	public Drink select(int drinkId) {
 		// 음료의 가격을 가져와서 현재 내 잔액보다 작거나 같은지 확인 ()내가 돈을 넣은 금액보다 음료수가 비싸면 안된다.)
 		// 근데 이걸 자판기가 가져도 되는거 맞음? SRP 위반아님? => 검증 클래스 따로만들자
-
-		// TODO: 여기 null 처리 해야함. Optional 사용해서 해보기.
 		var drink = inventory.getDrink(drinkId);
 
+		// TODO: 여기 null 처리 해야함. Optional 사용해서 해보기.
 		if(purchaseValidator.canNotPurchase(drink.getPrice())){
 			System.out.println("잔액이 부족합니다.");
 			return null;
@@ -58,34 +57,11 @@ public class Machine {
 
 		return drink;
 	}
-
-	public Map<String, Integer> printSalesLog() {
-		System.out.println("===== 매출 기록 =====");
-		for (Map.Entry<String, Integer> entry : salseLog.entrySet()) {
-			System.out.println(entry.getKey() + ": " + entry.getValue() + "원");
-		}
-		return salseLog;
-	}
-
 	public void init() {
 		// 자판기의 투입 금액을 0으로 초기화 하고 돈은 고객에게 반환.
 		currentMoney = new Money(0);
 	}
-
-
 	public SalesRecoder getSalesRecoder(){
-		return SalesRecoder;
+		return salesRecoder;
 	}
-
-	/*
-	public int refund(){
-		// 자판기의 투입 금액을 0으로 초기화 하고 돈은 고객에게 반환.
-		// 방법1. 변수에 담아서 리턴하기
-
-		int refund = currentMoney;
-		currentMoney = 0;
-		return refund;
-
-	}*/
-
 }
