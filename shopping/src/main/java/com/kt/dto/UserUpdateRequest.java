@@ -6,7 +6,7 @@ public record UserUpdateRequest(
 	@NotBlank
 	String name,
 	@NotBlank
-	String moble,
+	String mobile,
 	@NotBlank
 	String email
 ) {

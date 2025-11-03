@@ -74,16 +74,18 @@ public class UserService {
 			pair.getSecond()
 		);
 	}
+	public User detail(Long id){
+		return userRepository.selectById(id)
+			.orElseThrow(() -> new IllegalArgumentException(("존재하지 않는 회원입니다.")));
+	}
 
 	public void update(Long id, String name, String email, String mobile){
 		// user 존재 검증
-		var user = userRepository.selectById(id)
+		userRepository.selectById(id)
 			.orElseThrow(()->new IllegalArgumentException("존재하지 않는 회원입니다."));
+
 		userRepository.updateById(id, name, email, mobile);
 	}
 
-	public User detail(long id){
-		return userRepository.selectById(id);
 
-	}
 }

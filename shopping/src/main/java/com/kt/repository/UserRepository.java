@@ -2,6 +2,7 @@ package com.kt.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -76,7 +77,7 @@ public class UserRepository {
 		// return jdbcTemplate.queryForObject(sql, Boolean.class, loginId);
 	}
 
-	public void updatePassword(Long id, String password) {
+	public void updatePassword(long id, String password) {
 		// SRP 관점에서 => 비번을 잘 바꿀 책임.
 		// UPDATE {table} SET {column} = {value}, {cplumn} = {value} WHERE {condition}
 		// var sql = "UPDATE MEMBER SET password = ?";	// 모든세트 비번 다바꾸게됨
@@ -85,18 +86,17 @@ public class UserRepository {
 		jdbcTemplate.update(sql, password, id);
 	}
 
-	public boolean existsById(Long id) {
+	public boolean existsById(long id) {
 		var sql = "SELECT EXISTS(SELECT id FROM MEMBER WHERE loginId = ?)";
 		return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Boolean.class, id));
 	}
 
 	// id 값으로 유저를 DB에서 조회해서 User 객체를 반환하는 메서드가 필요하다
-	public Optional<User> selectById(Long id) {
+	public Optional<User> selectById(long id) {
 		var sql = "SELECT * FROM MEMBER WHERE id = ?";
-		// jdb ResultSet 객체로 반환을 함
-		// sql에서 *은 모든 컬럼
+		// jdb ResultSet 객체로 반환을 함 // sql에서 *은 모든 컬럼
 		var list = jdbcTemplate.query(sql, rowMapper(), id);
-		System.out.println(list);
+
 		return list.stream().findFirst();
 	}
 
@@ -113,7 +113,6 @@ public class UserRepository {
 		// '%keyword'(시작하는) -> 강 -> 강슬기
 		// 'keyword%'(끝나는) -> 기 -> 강슬기
 		// var sql = "SELECT * FROM MEMBER LIMIT ? OFFSET ? WHERE name LIKE '%?%'";
-		// var sql = "SELECT * FROM MEMBER LIMIT ? OFFSET ? WHERE name LIKE CONCAT('%', ?, '%')";
 		var sql = "SELECT * FROM MEMBER WHERE name LIKE CONCAT('%', ?, '%') LIMIT ? OFFSET ?";
 
 		var users = jdbcTemplate.query(sql, rowMapper(), keyword, size, page);
@@ -124,9 +123,9 @@ public class UserRepository {
 		return Pair.of(users, totalElements);
 	}
 
-	public void updateById(Long id, String name, String email, String mobile){
+	public void updateById(Long id, String name, String email, String mobile) {
 		var sql = "UPDATE MEMBER SET name = ?, email = ?, mobile = ?, updatedAt = ? WHERE id = ?";
-		jdbcTemplate.update(sql, name, email, mobile,LocalDateTime.now(), id);
+		jdbcTemplate.update(sql, name, email, mobile, LocalDateTime.now(), id);
 	}
 
 	private RowMapper<User> rowMapper() {
@@ -135,6 +134,7 @@ public class UserRepository {
 	}
 
 	private User mapToUser(ResultSet rs) throws SQLException {
+		System.out.println("mapToUser called");
 		return new User(
 			rs.getLong("id"),
 			rs.getString("loginId"),
@@ -142,10 +142,10 @@ public class UserRepository {
 			rs.getString("name"),
 			rs.getString("email"),
 			rs.getString("mobile"),
-			rs.getObject("gender", Gender.class),
-			rs.getObject("birthday", LocalDateTime.class),
+			Gender.valueOf(rs.getString("gender")),
+			rs.getObject("birthday", LocalDate.class),
 			rs.getObject("createdAt", LocalDateTime.class),
-			rs.getObject("updateAt", LocalDateTime.class),
+			rs.getObject("updateAt", LocalDateTime.class)
 			);
 	}
 }
