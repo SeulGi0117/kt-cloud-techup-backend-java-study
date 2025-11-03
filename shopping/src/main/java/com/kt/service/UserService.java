@@ -35,8 +35,8 @@ public class UserService{
 	}
 
 	// todo: id 중복 검사 만들기
+	// 기본형은 null 절대 안됨.
 	public boolean isDuplicateLoginId(String loginId){
 		return userRepository.existsByLoginId(loginId);
 	}
-
 }
