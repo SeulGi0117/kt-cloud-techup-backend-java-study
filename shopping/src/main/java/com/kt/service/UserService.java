@@ -39,15 +39,20 @@ public class UserService{
 		return userRepository.existsByLoginId(loginId);
 	}
 
-	public void changePassword(int id, String oldPassword, String password){
+	public void changePassword(Long id, String oldPassword, String password) throws Throwable {
+		var user = userRepository.selectById(id)
+			.orElseThrow(()-> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
 		// 서비스 입장에서는 id 값이 외부에서 들어오느 값이기 때문에 int로 받음
 		// 실제로 db에 유저가 존재하냐?
 		// 유저가 존해하면 업데이트 : 존재하지 않으면 없단느 예외처리
 		// 1234 -> 1234 로 바꾸면 예외처리 이런거
 
-		if(!userRepository.existsById(id)){
-			throw new IllegalArgumentException("존재하지 않는 회원입니다.");
+		// 유저를 조회해서 비밀번호가 조회한 비번과 새로운 비번이 같은지?
+		if(!user.getPassword().equals(oldPassword)){
+			throw new IllegalArgumentException("기본 비밀번호가 일치하지 않습니다.");
 		}
+
 		if(oldPassword.equals(password)){
 			throw new IllegalArgumentException("기본 비밀번호와 동일한 비밀번호는 사용할 수 없습니다.");
 		}

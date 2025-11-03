@@ -1,8 +1,15 @@
 package com.kt.repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.kt.domain.Gender;
 import com.kt.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -15,19 +22,19 @@ public class UserRepository {
 	public void save(User user) {
 		// 서비스에서 dto를 도메인으로 바꾼다음 전달.
 		var sql = """
-			INSERT INTO USER (
-			id,
-			loginId,
-			password,
-			name,
-			birthday,
-			mobile,
-			email,
-			gender,
-			createdAt
-			updateAt
-			) VALUES (?, ?, ?, ?,?,?,?,?,?,?)
-		""";
+				INSERT INTO USER (
+				id,
+				loginId,
+				password,
+				name,
+				birthday,
+				mobile,
+				email,
+				gender,
+				createdAt
+				updateAt
+				) VALUES (?, ?, ?, ?,?,?,?,?,?,?)
+			""";
 
 		jdbcTemplate.update(
 			sql,
@@ -65,7 +72,9 @@ public class UserRepository {
 		return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Boolean.class, loginId));
 		// return jdbcTemplate.queryForObject(sql, Boolean.class, loginId);
 	}
-	public void updatePassword(int id, String password){
+
+	public void updatePassword(Long id, String password) {
+		// SRP 관점에서 => 비번을 잘 바꿀 책임.
 		// UPDATE {table} SET {column} = {value}, {cplumn} = {value} WHERE {condition}
 		// var sql = "UPDATE MEMBER SET password = ?";	// 모든세트 비번 다바꾸게됨
 
@@ -73,8 +82,38 @@ public class UserRepository {
 		jdbcTemplate.update(sql, password, id);
 	}
 
-	public boolean existsById(int id) {
+	public boolean existsById(Long id) {
 		var sql = "SELECT EXISTS(SELECT id FROM MEMBER WHERE loginId = ?)";
 		return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Boolean.class, id));
+	}
+
+	// id 값으로 유저를 DB에서 조회해서 User 객체를 반환하는 메서드가 필요하다
+	public Optional selectById(Long id) {
+		var sql = "SELECT * FROM MEMBER WHERE id = ?";
+		// jdb ResultSet 객체로 반환을 함
+		// sql에서 *은 모든 컬럼
+		var list =jdbcTemplate.query(sql, rowMapper(), id);
+		System.out.println(list);
+		return list.stream().findFirst().orElse(null);
+	}
+
+	private RowMapper<User> rowMapper() {
+		return (rs, rowNum) -> mapToUser(rs);
+		// () -> {return A} 람다는 단일 실행문이면 {}와 return 생략이 가능하다.
+	}
+
+	private User mapToUser(ResultSet rs) throws SQLException {
+		return new User(
+			rs.getLong("id"),
+			rs.getString("loginId"),
+			rs.getString("password"),
+			rs.getString("name"),
+			rs.getString("email"),
+			rs.getString("mobile"),
+			rs.getObject("gender", Gender.class),
+			rs.getObject("birthday", LocalDateTime.class),
+			rs.getObject("createdAt", LocalDateTime.class),
+			rs.getObject("updateAt", LocalDateTime.class),
+			);
 	}
 }
