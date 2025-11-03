@@ -74,4 +74,9 @@ public class UserService {
 			pair.getSecond()
 		);
 	}
+
+	public User detail(long id){
+		return userRepository.selectById(id);
+
+	}
 }
