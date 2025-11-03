@@ -3,13 +3,16 @@ package com.kt.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kt.domain.User;
 import com.kt.dto.CustomPage;
+import com.kt.dto.UserUpdateRequest;
 import com.kt.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -43,8 +46,18 @@ public class AdminUserController {
 	public User detail(@PathVariable Long id) {
 		return userService.detail(id);
 	}
-	// 유저 정보 수정
-	// 유저 삭제
-	// 유저 비번 초기화
 
+	// 유저 정보 수정
+	@PutMapping("/{id")
+	@ResponseStatus(HttpStatus.OK)
+	public User update(@PathVariable Long id, @ResponseBody UserUpdateRequest request){
+		userService.update((id, request.name(), request.email(), request.mobile());
+	}
+
+	// todo: 유저 삭제, 유저 비번 초기화 만들기
+
+	// 유저 삭제
+	// DELETE FROM MEMBER WHERE id =?
+
+	// 유저 비번 초기화
 }
