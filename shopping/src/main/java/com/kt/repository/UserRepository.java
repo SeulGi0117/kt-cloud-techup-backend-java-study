@@ -3,6 +3,7 @@ package com.kt.repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kt.domain.Gender;
 import com.kt.domain.User;
+import com.kt.dto.CustomPage;
 
 import lombok.RequiredArgsConstructor;
 
@@ -88,13 +90,38 @@ public class UserRepository {
 	}
 
 	// id 값으로 유저를 DB에서 조회해서 User 객체를 반환하는 메서드가 필요하다
-	public Optional selectById(Long id) {
+	public Optional<User> selectById(Long id) {
 		var sql = "SELECT * FROM MEMBER WHERE id = ?";
 		// jdb ResultSet 객체로 반환을 함
 		// sql에서 *은 모든 컬럼
-		var list =jdbcTemplate.query(sql, rowMapper(), id);
+		var list = jdbcTemplate.query(sql, rowMapper(), id);
 		System.out.println(list);
-		return list.stream().findFirst().orElse(null);
+		return list.stream().findFirst();
+	}
+
+	public CustomPage selectAll(int page, int size) {
+
+		// paging의 구조
+		// [백엔드입장에서 필요한것]
+		// 한 화면에 몇개 보여줄것인가?	=> limit(db에서 limit이라고함)
+		// 내가 몇번째 페이지를 보고 있는가?	=> offset (몇개를 건너 뛸것인가?)
+		// 보고 있는 페이지 -1 *limit. 프론트가-1 하는경우도 있고 백엔드가 하는 경우도 있고
+		// full-scan을 하기 때문에 성능이슈가 생긴다 -> cursor 기반으로 바꾸면 성능 ok. 하지만우린 여기까진 안할거
+		var sql = "SELECT * FROM MEMBER LIMIT ? OFFSET ?";
+
+		var users = jdbcTemplate.query(sql, rowMapper(), page, size);
+
+		var countSql = "SELECT COUNT(*) FROM MEMBER";
+		var totalElements = jdbcTemplate.queryForObject(countSql, Long.class);
+		var pages =(int)Math.ceil((double) totalElements / size);
+
+		return new CustomPage(
+			users,
+			size,
+			page,
+			pages,
+			totalElements
+			);
 	}
 
 	private RowMapper<User> rowMapper() {
