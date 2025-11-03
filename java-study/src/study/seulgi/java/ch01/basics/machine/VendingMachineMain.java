@@ -7,7 +7,7 @@ public class VendingMachineMain {
 	// POJO 순수 자바로 이루어져 있고, 객체는 다르지만 그 가치가 같을때 - equals, hashcode - Drink, Money
 	// DTO: Data Transfer Object - record - 비지니스로직을 가지면 x - getter만
 
-	// TODO: 실행해서 테스트 할때 잔애기 -200으로 뜸. 이거 고쳐야함. 반드시 디버깅 하면서 작업.
+	// TODO: 실행해서 테스트 할때 잔액 -200으로 뜸. 이거 고쳐야함. 반드시 디버깅 하면서 작업.
 	public static void main(String[] args) {
 		var machine = new Machine();
 		machine.printDrinks();

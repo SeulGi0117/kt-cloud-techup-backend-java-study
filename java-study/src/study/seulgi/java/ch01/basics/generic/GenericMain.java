@@ -74,5 +74,25 @@ public class GenericMain {
 		SoutUtil.print(numbers.toArray());
 		SoutUtil.print(quantityBoxes.toArray());
 
+		// ======================= Calcaulate =======================
+
+		// new Calculate<Integer>().add(); 이렇게 new 할때 integer 해줘야 타입을 알지, 그전까지는 그냥 T만 쓰면 모름. 무슨 타입을 받아올지.
+		var result = new Calculate<Integer>().add(2,3);
+		System.out.println(result);
+		System.out.println(Calculate.subtract(1, 2));
+
+		// Object 모든 객체의 상위 클래스. 얘만 같다써도 구조적으로는 문제가 없다는 뜻임.
+		// Generic에도 Object 같은 최강자가 존재한다. => 와일드 카드 <?>
+
+		List<Double> doubleList = List.of(1.1, 2.2, 3.3);
+		List<String> stringList = List.of("A", "B", "C");
+		SoutUtil.print(doubleList);
+		SoutUtil.print(stringList);
+
+		// generic
+		// 형변환이 필요없고
+		// 컴파일 단계에서 타입체크를 해줌
+		// 코드의 재사용성이 높음
+		// 유지보수 효율이 올라간다.
 	}
 }

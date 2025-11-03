@@ -29,7 +29,6 @@ public class Admin {
 		);
 	}
 
-	// TODO: 총 매출, 총 집계 넣기
 	public void printSalesHistory(){
 		System.out.println("===== 매출 기록 =====");
 		for(Map.Entry<LocalDate, List<Drink>> entry : salesHistory.entrySet()){
