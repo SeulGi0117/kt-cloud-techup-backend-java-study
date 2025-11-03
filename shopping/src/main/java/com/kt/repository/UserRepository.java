@@ -100,7 +100,7 @@ public class UserRepository {
 		return list.stream().findFirst();
 	}
 
-	public Pair<List<User>, Long> selectAll(int page, int size) {
+	public Pair<List<User>, Long> selectAll(int page, int size, String keyword) {
 
 		// paging의 구조
 		// [백엔드입장에서 필요한것]
@@ -108,12 +108,18 @@ public class UserRepository {
 		// 내가 몇번째 페이지를 보고 있는가?	=> offset (몇개를 건너 뛸것인가?)
 		// 보고 있는 페이지 -1 *limit. 프론트가-1 하는경우도 있고 백엔드가 하는 경우도 있고
 		// full-scan을 하기 때문에 성능이슈가 생긴다 -> cursor 기반으로 바꾸면 성능 ok. 하지만우린 여기까진 안할거
-		var sql = "SELECT * FROM MEMBER LIMIT ? OFFSET ?";
 
-		var users = jdbcTemplate.query(sql, rowMapper(), page, size);
+		// 키워드 검색 = LIKE '%keyword%'(포함)[대부분 이거 씀] 슬 -> 강슬기
+		// '%keyword'(시작하는) -> 강 -> 강슬기
+		// 'keyword%'(끝나는) -> 기 -> 강슬기
+		// var sql = "SELECT * FROM MEMBER LIMIT ? OFFSET ? WHERE name LIKE '%?%'";
+		// var sql = "SELECT * FROM MEMBER LIMIT ? OFFSET ? WHERE name LIKE CONCAT('%', ?, '%')";
+		var sql = "SELECT * FROM MEMBER WHERE name LIKE CONCAT('%', ?, '%') LIMIT ? OFFSET ?";
 
-		var countSql = "SELECT COUNT(*) FROM MEMBER";
-		var totalElements = jdbcTemplate.queryForObject(countSql, Long.class);
+		var users = jdbcTemplate.query(sql, rowMapper(), keyword, size, page);
+
+		var countSql = "SELECT COUNT(*) FROM MEMBER WHERE name LIKE CONCAT('%', ?, '%')";
+		var totalElements = jdbcTemplate.queryForObject(countSql, Long.class, keyword);
 
 		return Pair.of(users, totalElements);
 	}
