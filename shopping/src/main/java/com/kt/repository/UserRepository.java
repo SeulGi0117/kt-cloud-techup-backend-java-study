@@ -64,6 +64,12 @@ public class UserRepository {
 		var sql = "SELECT EXISTS(SELECT id FROM MEMBER WHERE loginId = ?)";
 		return Boolean.TRUE.equals(jdbcTemplate.queryForObject(sql, Boolean.class, loginId));
 		// return jdbcTemplate.queryForObject(sql, Boolean.class, loginId);
+	}
+	public void updatePassword(int id, String password){
+		// UPDATE {table} SET {column} = {value}, {cplumn} = {value} WHERE {condition}
+		// var sql = "UPDATE MEMBER SET password = ?";	// 모든세트 비번 다바꾸게됨
 
+		var sql = "UPDATE MEMBER SET password = ? WHERE id =?";
+		jdbcTemplate.update(sql, password, id);
 	}
 }
