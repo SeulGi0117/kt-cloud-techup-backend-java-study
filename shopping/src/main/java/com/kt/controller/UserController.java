@@ -1,6 +1,7 @@
 package com.kt.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,7 +58,7 @@ public class UserController {
 	// @RequestBody를 보고 jacksonobjectMapper가 동작해서 json을 읽어서 dto로 변환.
 
 	public void create(@RequestBody UserCreateRequest request){
-		System.out.println(request.toString());
+		userService.create(request);
 		// jackson object mapper -> json to dto를 매핑
 	}
 	// queryString => ?loginId-s1234&password=abcd
@@ -73,8 +74,7 @@ public class UserController {
 		return userService.isDuplicateLoginId(loginId);
 	}
 
-	// uri는 식별이 가능해야한다.
-	// users/update-password 하는건 알겟다. 근데 어떤 유저에게 할건지? 모름.
+	// uri는 식별이 가능해야한다.	// users/update-password 하는건 알겟다. 근데 어떤 유저에게 할건지? 모름.
 	// 유저들x, 어떤 유저? 이게 없다.
 	// body => json으로 넣어서 보내고
 
@@ -90,6 +90,12 @@ public class UserController {
 		@RequestParam @Valid UserUpdatePasswordRequest request
 		) {
 		userService.changePassword(id, request.oldPassword(), request.oldPassword());
+	}
+
+	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public void delete(@PathVariable Long id){
+		userService.delete(id);
 	}
 
 }
