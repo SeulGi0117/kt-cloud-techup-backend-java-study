@@ -83,13 +83,13 @@ public class UserController {
 	// 2. uri에 id 값을 넣는다 /user/{id}/update-password
 	// 3 인증/인가 객체에서 id 값을 꺼낸다. => 사실 이게 맞음
 
-	@PutMapping("/{userId}/update-password")
+	@PutMapping("/{id}/update-password")
 	@ResponseStatus(HttpStatus.OK)
 	public void updatePassword(
-		@PathVariable Integer id,
-		@RequestParam @Valid UserUpdatePasswordRequest request
-		) {
-		userService.changePassword(id, request.oldPassword(), request.oldPassword());
+		@PathVariable Long id,
+		@RequestBody @Valid UserUpdatePasswordRequest request
+	) {
+		userService.changePassword(id, request.oldPassword(), request.newPassword());
 	}
 
 	@DeleteMapping("/{id}")

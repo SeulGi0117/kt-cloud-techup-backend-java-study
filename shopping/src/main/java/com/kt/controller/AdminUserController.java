@@ -1,5 +1,6 @@
 package com.kt.controller;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,7 @@ public class AdminUserController {
 	// ?key=value&page=1&keyword=asdasd
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	public CustomPage search(
+	public Page<User> search(
 		// 안 넣는 경우에 0, 10 이런식으로 하는데 처리하게끔 동작하도록 설정한다. defaultValue를 통해서!
 		@RequestParam(defaultValue = "1") int page,
 		@RequestParam(defaultValue = "10") int size,
@@ -41,7 +42,7 @@ public class AdminUserController {
 
 		// pageable -> interface -> 구현체: PageRequest
 		// 인터페이스가 존재하면 반드시 구현체가(클래스) 있다고(존재해야한다고) 약속이 되어 있다.
-		return userService.search(PageRequest.of(page -1, size), keyword);
+		return userService.search(PageRequest.of(page - 1, size), keyword);
 	}
 
 	// 유저 상세 조회
@@ -54,7 +55,7 @@ public class AdminUserController {
 	// 유저 정보 수정
 	@PutMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public void update(@PathVariable Long id, @RequestBody @Valid UserUpdateRequest request){
+	public void update(@PathVariable Long id, @RequestBody @Valid UserUpdateRequest request) {
 		userService.update(id, request.name(), request.email(), request.mobile());
 	}
 
@@ -62,6 +63,5 @@ public class AdminUserController {
 
 	// 유저 삭제
 	// DELETE FROM MEMBER WHERE id =?
-
 	// 유저 비번 초기화
 }

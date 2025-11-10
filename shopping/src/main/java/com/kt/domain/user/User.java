@@ -33,7 +33,6 @@ public class User extends BaseEntity {
 	// Persistent entity 'User' should have primary key
 	@Id  // Spring이 아닌 jakart Id 어노테이션을 사용해야한다.
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 	private String loginId;
 	private String password;
 	private String name;
@@ -52,15 +51,25 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "user") // orders에 맡길거임
 	private List<Order> orders = new ArrayList<>();
 
-	public User(long id, String loginId, String password, String name, String email, String mobile, String gender,
-		LocalDate birthday, LocalDateTime now, LocalDateTime now1) {
-		this.id = id;
+	public User(String loginId, String password, String name, String email, String mobile, Gender gender,
+		LocalDate birthday, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		this.loginId = loginId;
 		this.password = password;
 		this.name = name;
 		this.email = email;
 		this.mobile = mobile;
-		this.gender = Gender.valueOf(gender);
+		this.gender = gender;
 		this.birthday = birthday;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+	public void changePassword(String password) {
+		this.password = password;
+	}
+
+	public void update(String name, String email, String mobile) {
+		this.name = name;
+		this.email = email;
+		this.mobile = mobile;
 	}
 }

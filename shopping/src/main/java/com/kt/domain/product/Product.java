@@ -9,10 +9,14 @@ import com.kt.commone.BaseEntity;
 import com.kt.domain.order.Order;
 import com.kt.domain.orderproduct.OrderProduct;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
+import lombok.Getter;
 
+@Entity
+@Getter
 public class Product extends BaseEntity {
 	private String name;
 	private Long price;
@@ -20,7 +24,7 @@ public class Product extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private ProductStatus status;
 
-	@OneToMany
+	@OneToMany(mappedBy = "product")
 	private List<OrderProduct> orderProducts = new ArrayList<>();
 
 	// TODO: 생성, 수정, 삭제, 조회, 상태변경, 재고수량 증감

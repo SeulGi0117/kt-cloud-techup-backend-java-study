@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.kt.dto.UserCreateRequest;
 import com.kt.domain.user.User;
-import com.kt.repository.UserJdbcRepository;
+// import com.kt.repository.UserJdbcRepository;
 import com.kt.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,10 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional // 실수 많이 할것같으면 그냥 Class 레벨에다가 달아주면 된다. ReadOnly = true는 쓰기가 불가능. 상태 변경해도 더티체킹 동작x.
 // 이런 경우에는 밑에다가 @Transactional 붙여주면 된다.
 public class UserService {
-	private final UserJdbcRepository userJdbcRepository;  // ← 생성자 주입(Lombok)
+	// private final UserJdbcRepository userJdbcRepository;  // ← 생성자 주입(Lombok) 추억속으로 ... ㅃ2
 	private final UserRepository userRepository;
 
-	// 트랜잭션 해줘. 어노테이션 달아야함. Entity에는 자카르타 어노테이션을 썼다.(엔티티 자체가 spring bean이 아니라서)
+	// 트랜잭션 처리해줘. 어노테이션 달아야함. Entity에는 자카르타 어노테이션을 썼다.(엔티티 자체가 spring bean이 아니라서)
 	// 근데 서비스는? spring bean으로 되어있음. transactional 은 spring 거로 어노테이션 달아야한다.
 
 	// PSA - Portable Service Abstraction
@@ -30,7 +30,6 @@ public class UserService {
 	@Transactional
 	public void create(UserCreateRequest request) {
 		var newUser = new User(
-			userJdbcRepository.selectMaxId() + 1,
 			request.loginId(),
 			request.password(),
 			request.name(),
@@ -83,7 +82,7 @@ public class UserService {
 
 	public void update(Long id, String name, String email, String mobile) {
 		// user 존재 검증
-		userRepository.findById(id)
+		var user = userRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다"));
 		user.update(name, email, mobile);
 	}
