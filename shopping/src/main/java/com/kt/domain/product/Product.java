@@ -36,4 +36,12 @@ public class Product extends BaseEntity {
 	// 재고수량 감소
 	// 재고수량 증가
 
+
+	public boolean canProvide(Long quantity) {
+		return this.stock >= quantity;
+	}
+
+	public void mapToOrderProduct(OrderProduct orderProduct){
+		this.orderProducts.add(orderProduct);
+	}
 }

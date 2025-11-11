@@ -34,7 +34,6 @@ public class Order extends BaseEntity {
 	// 주문(N) <-> 회원(1). 회원은 주문 여러개 가능.
 	// N : 1 => 다대일 관계
 	// => JPA에서는 ManyToOne 라고한다.
-
 	// FK => 많은 쪽에 생김(자동으로) 주문은 회원을 알고, 회원은 주문으 모르는상태. 단방향 고나계
 
 	@ManyToOne
@@ -44,6 +43,12 @@ public class Order extends BaseEntity {
 	@JoinColumn(name = "user_id") // user는 FK 많은 쪽에 생기니까 user_id 참고
 	private User user;
 
+	public Order(Receiver receiver,User user, LocalDateTime deliveredAy, ) {
+		this.receiver = receiver;
+		this.user = user;
+		this.deliveredAy = deliveredAy;
+		this.status = OrderStatus.PENDING;
+	}
 	// [1:N]하나의 오더는 여러개의 상품을 가질 수 있음
 	// [1:N] 하나의 상품은 여러개의 오더를 가질 수 있다.
 

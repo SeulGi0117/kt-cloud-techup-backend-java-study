@@ -1,4 +1,4 @@
-package com.kt.repository;
+package com.kt.repository.user;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +19,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	Boolean existsByLoginId(String loginId);
 
 	Page<User> findAllByNameContationg(String name, Pageable pageable);
+
+	// todo: 25.11.07 실습코드 따라 작성해야함
+	default User findById....어쩌구
+
+
 	/*
 	// 2. JPQL로 작성하는 방법
 	@Query("""

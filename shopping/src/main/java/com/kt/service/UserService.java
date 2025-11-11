@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import com.kt.dto.UserCreateRequest;
 import com.kt.domain.user.User;
 // import com.kt.repository.UserJdbcRepository;
-import com.kt.repository.UserRepository;
+import com.kt.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 

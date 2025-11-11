@@ -15,6 +15,12 @@ import lombok.Getter;
 public class OrderProduct extends BaseEntity {
 	private Long quantity;
 
+	public OrderProduct(Order order, Product product, Long quantity) {
+		this.order = order;
+		this.product = product;
+		this.quantity = quantity;
+	}
+
 	@ManyToOne
 	@JoinColumn(name = "order_id")
 	private Order order;
