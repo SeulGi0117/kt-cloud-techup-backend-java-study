@@ -20,3 +20,8 @@ spring:
         jdbc:
           time_zone: Asia/Seoul
         show_sql: true  # 로컬에서만 써야됨.. 돈 개많이 나옴 aws절대 ㄴㄴ
+    show-sql: true
+  data:
+    redis:
+      host: ${redis.host:localhost}
+      port: ${redis.port:6379}

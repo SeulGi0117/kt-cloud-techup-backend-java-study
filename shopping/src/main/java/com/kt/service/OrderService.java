@@ -3,8 +3,10 @@ package com.kt.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kt.repository.ProductRepository;
 import com.kt.repository.user.UserRepository;
 
+import org.redisson.Redisson;
 import lombok.RequiredArgsConstructor;
 
 @Service // 서비스 처리하는거라고 알려주는 어노테이션
@@ -27,13 +29,19 @@ public class OrderService {
 		// 2. product에게 물어본다. => 너 재고 수량 충분하니?
 		// 3. 서비스에서 해결한다. var result = product.getStock() - quantity <0; 이런식으로 하는거.
 
+		// TODO: redis import 가 안됨. 실습 코드 따라가면서 천천히 redis 실습해보기
+		// 여기서 Lock을 획득 -> getLock에서 문자열을 인자로 줘야함
+		var rLock = redissonClient.getLock("stock");
+		rLock.tryLock()
 		var product = productRepository.findByIdOrThrow(productId);
-		Preconditions.product.canProvide(quantity)
 
-
+		// TODO: 처리방법
+		// 1. try catch finally
+		// 2. 메소드레벨에서 throws 한다
+		Preconditions.validate(product.canProvide(quantity));
 
 		var user = userRepository.findAllByNameContationg(userId, ErrorCode.NOT_FOUND_USER);
-		var receiver = new Receiver(
+		var receiver = new Receiverr(
 			receiverName,
 			receiverAddress,
 			receiverMobile
