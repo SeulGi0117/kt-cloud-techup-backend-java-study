@@ -3,6 +3,7 @@ package com.kt.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kt.commone.ErrorCode;
 import com.kt.repository.ProductRepository;
 import com.kt.repository.user.UserRepository;
 
@@ -41,7 +42,7 @@ public class OrderService {
 		Preconditions.validate(product.canProvide(quantity));
 
 		var user = userRepository.findAllByNameContationg(userId, ErrorCode.NOT_FOUND_USER);
-		var receiver = new Receiverr(
+		var receiver = new Receiver(
 			receiverName,
 			receiverAddress,
 			receiverMobile

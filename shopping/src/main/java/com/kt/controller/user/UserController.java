@@ -1,6 +1,8 @@
-package com.kt.controller;
+package com.kt.controller.user;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kt.dto.UserCreateRequest;
-import com.kt.dto.UserUpdatePasswordRequest;
+import com.kt.commone.ApiResult;
+import com.kt.dto.user.UserCreateRequest;
+import com.kt.dto.user.UserUpdatePasswordRequest;
 import com.kt.service.UserService;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
+@ApiResponse
 @ApiResponses(value = {
 	@ApiResponse(responseCode = "400", description = "유효성 검사 실패"),
 	@ApiResponse(responseCode = "500", description = "서버 에러 - 백엔드에 바로 문의 바랍니다."),
@@ -57,8 +61,9 @@ public class UserController {
 	// json 형태의 body에 담겨서 post 요청으로 /users 로 들어오면
 	// @RequestBody를 보고 jacksonobjectMapper가 동작해서 json을 읽어서 dto로 변환.
 
-	public void create(@RequestBody UserCreateRequest request){
+	public ApiResult<Void> create(@RequestBody UserCreateRequest request){
 		userService.create(request);
+		return ApiResult.ok();
 		// jackson object mapper -> json to dto를 매핑
 	}
 	// queryString => ?loginId-s1234&password=abcd
@@ -70,8 +75,10 @@ public class UserController {
 
 	@GetMapping("/duplicate-login-id")
 	@ResponseStatus(HttpStatus.OK)
-	public Boolean isDuplicateLoginId(@RequestParam String loginId){
-		return userService.isDuplicateLoginId(loginId);
+	public ApiResult<Boolean> isDuplicateLoginId(@RequestParam String loginId){
+		var result = userService.isDuplicateLoginId(loginId);
+
+		return ApiResult.ok(result);
 	}
 
 	// uri는 식별이 가능해야한다.	// users/update-password 하는건 알겟다. 근데 어떤 유저에게 할건지? 모름.
@@ -85,17 +92,19 @@ public class UserController {
 
 	@PutMapping("/{id}/update-password")
 	@ResponseStatus(HttpStatus.OK)
-	public void updatePassword(
+	public ApiResult<Void> updatePassword(
 		@PathVariable Long id,
 		@RequestBody @Valid UserUpdatePasswordRequest request
 	) {
 		userService.changePassword(id, request.oldPassword(), request.newPassword());
+		return ApiResult.ok();
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public void delete(@PathVariable Long id){
+	public ApiResult<Void> delete(@PathVariable Long id){
 		userService.delete(id);
+		return ApiResult.ok();
 	}
 
 }

@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sound.midi.Receiver;
+
 import com.kt.commone.BaseEntity;
 import com.kt.domain.orderproduct.OrderProduct;
 import com.kt.domain.product.Product;
 import com.kt.domain.user.User;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -23,9 +26,9 @@ import lombok.Getter;
 // Order라는건 MySql의 예약어라 그대로 쓰면 에러가 난다.
 @Table(name = "orders")
 public class Order extends BaseEntity {
-	private String receiverName;
-	private String receiverAddress;
-	private String receiverMobile;
+	@Embedded
+	// 순수 자바 객체를 쓰고 싶을때 사용하는 어노테이션
+	private Receiver receiver;
 	@Enumerated(EnumType.STRING)
 	private OrderStatus orderStatus;
 	private LocalDateTime deliveredAy;

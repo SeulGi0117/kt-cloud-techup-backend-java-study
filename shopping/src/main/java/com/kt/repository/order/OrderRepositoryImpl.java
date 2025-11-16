@@ -39,8 +39,8 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
 		// 총갯수
 		// 현재 몇개볼건지 / 총갯수 = 총 몇페이지 볼건지?
-		var total = jpaQueryFactory
-			.select(order.id)
+		// var total = jpaQueryFactory
+		// 	.select(order.id)
 			// todo: join들도 다 들어와 줘야한다. 검색했을때 페이지수도 달라지니까.
 
 

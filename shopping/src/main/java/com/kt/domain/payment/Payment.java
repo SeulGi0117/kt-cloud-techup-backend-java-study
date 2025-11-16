@@ -1,10 +1,12 @@
 package com.kt.domain.payment;
 
 import com.kt.commone.BaseEntity;
+import com.kt.domain.order.Order;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 
 @Entity
@@ -14,4 +16,7 @@ public class Payment extends BaseEntity {
 	private Long deliveryFee;
 	@Enumerated(EnumType.STRING)
 	private PaymentType type;
+
+	@OneToOne
+	private Order order;
 }

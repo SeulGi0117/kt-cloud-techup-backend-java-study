@@ -2,7 +2,9 @@ package com.kt.service;
 
 import java.time.LocalDateTime;
 
-import com.kt.dto.UserCreateRequest;
+import com.kt.commone.CustomException;
+import com.kt.commone.ErrorCode;
+import com.kt.dto.user.UserCreateRequest;
 import com.kt.domain.user.User;
 // import com.kt.repository.UserJdbcRepository;
 import com.kt.repository.user.UserRepository;
@@ -13,6 +15,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+// 구현체가 하나 이상 필요로 해야 인터페이스가 의미가 있다.
+// 인터페이스 : 구현체 1:1로 다 나눠야 하나. -> 실무에서도 많이 고민한다 -> 한개일떄는 굳이? 2개 이상이면 나누기
+// 관례를 지키려고(원래는 인터페이스 만드는게 맞음) 추상화를 굳이 하는것을 관습적 추상화라고 한다.
+// 인터페이스를 굳이 나눴을때 불편한점 -> 유지보수 힘들다(관리포인트 늘어나서)
 
 @RequiredArgsConstructor
 @Service
@@ -52,7 +59,7 @@ public class UserService {
 
 	public void changePassword(Long id, String oldPassword, String password) throws Throwable {
 		var user = userRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다"));
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
 		// 서비스 입장에서는 id 값이 외부에서 들어오느 값이기 때문에 int로 받음
 		// 실제로 db에 유저가 존재하냐?
@@ -61,10 +68,10 @@ public class UserService {
 
 		// 유저를 조회해서 비밀번호가 조회한 비번과 새로운 비번이 같은지?
 		if (!user.getPassword().equals(oldPassword)) {
-			throw new IllegalArgumentException("기본 비밀번호가 일치하지 않습니다");
+			throw new CustomException(ErrorCode.DOES_NOT_MATCH_OLD_PASSWORD);
 		}
 		if (oldPassword.equals(password)) {
-			throw new IllegalArgumentException("기본 비밀번호와 동일한 비밀번호는 사용할 수 없습니다");
+			throw new CustomException(ErrorCode.CAN_NOT_ALLOWED_SAME_PASSWORD);
 		}
 		user.changePassword(password);
 		// userRepository.save(user); 이렇게 해줘도 된다.
@@ -77,13 +84,13 @@ public class UserService {
 
 	public User detail(Long id) {
 		return userRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException(("존재하지 않는 회원입니다")));
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 	}
 
 	public void update(Long id, String name, String email, String mobile) {
 		// user 존재 검증
 		var user = userRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다"));
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 		user.update(name, email, mobile);
 	}
 
