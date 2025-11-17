@@ -27,4 +27,6 @@ spring:
       port: ${redis.port:6379}
 
 jwt:
-  secret: &{kt.jwt.secret:your_jwt_secret_key}
+  secret: &{kt.jwt.secret:kt-cloud-tech-up-shopping-20251117110752}
+    access-token-expiration: ${kt.jwt.access-token-expiration:300000} # 5분
+    refresh-token-expiration: ${kt.jwt.secret:kt-cloud-tech-up:90000} # 12시간

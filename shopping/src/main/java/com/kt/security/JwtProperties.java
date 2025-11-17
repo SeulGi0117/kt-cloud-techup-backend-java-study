@@ -1,7 +1,12 @@
 package com.kt.security;
 
+import java.util.Date;
+
+import javax.crypto.SecretKey;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,5 +15,18 @@ import lombok.Getter;
 @ConfigurationProperties(prefix = "jwt")
 public class JwtProperties {
 	private final String secret;
+	private Long accessTokenExpiration;
+	private Long refreshTokenExpiration;
 
+	public SecretKey getSecret() {
+		return Keys.hmacShaKeyFor(secret.getBytes());
+	}
+
+	public Date getAccessExpiration() {
+		return new Date(new Date().getTime()+ accessTokenExpiration);
+	}
+
+	public Date getRefreshExpiration() {
+		return new Date(new Date().getTime()+ refreshTokenExpiration);
+	}
 }
