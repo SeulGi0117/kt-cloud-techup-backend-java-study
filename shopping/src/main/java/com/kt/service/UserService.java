@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 	// private final UserJdbcRepository userJdbcRepository;  // ← 생성자 주입(Lombok) 추억속으로 ... ㅃ2
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder;
 
 	// 트랜잭션 처리해줘. 어노테이션 달아야함. Entity에는 자카르타 어노테이션을 썼다.(엔티티 자체가 spring bean이 아니라서)
 	// 근데 서비스는? spring bean으로 되어있음. transactional 은 spring 거로 어노테이션 달아야한다.
@@ -38,7 +40,7 @@ public class UserService {
 	public void create(UserCreateRequest request) {
 		var newUser = new User(
 			request.loginId(),
-			request.password(),
+			passwordEncoder.encode(request.password()),
 			request.name(),
 			request.email(),
 			request.mobile(),
@@ -58,8 +60,7 @@ public class UserService {
 	}
 
 	public void changePassword(Long id, String oldPassword, String password) throws Throwable {
-		var user = userRepository.findById(id)
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+		var user = userRepository.findByIdOrThrow(id, ErrorCode.NOT_FOUND_USER);
 
 		// 서비스 입장에서는 id 값이 외부에서 들어오느 값이기 때문에 int로 받음
 		// 실제로 db에 유저가 존재하냐?
