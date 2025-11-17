@@ -58,6 +58,7 @@ public class SecurityConfiguration {
 				}
 			)
 			.authorizeHttpRequests(request -> request.anyRequest().authenticated())
-			.csrf(AbstractHttpConfigurer)
+			.csrf(AbstractHttpConfigurer::disable);
+		return http.build();
 	}
 }

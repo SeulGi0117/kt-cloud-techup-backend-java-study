@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kt.commone.CustomException;
 import com.kt.commone.ErrorCode;
+import com.kt.commone.Preconditions;
 import com.kt.repository.user.UserRepository;
 import com.kt.security.JwtService;
 
