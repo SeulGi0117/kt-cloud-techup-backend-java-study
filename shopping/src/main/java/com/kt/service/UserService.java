@@ -70,7 +70,7 @@ public class UserService {
 
 		// 유저를 조회해서 비밀번호가 조회한 비번과 새로운 비번이 같은지?
 		// 패스워드가 이전건과 달라야한다 => 해피한 상황 // 패스워드가 같으면 안되는데 => 해피하지 않은 상황
-		Preconditions.validate(!user.getPassword().equals(oldPassword), ErrorCode.DOES_NOT_MATCH_OLD_PASSWORD);
+		Preconditions.validate(user.getPassword().equals(oldPassword), ErrorCode.DOES_NOT_MATCH_OLD_PASSWORD);
 		Preconditions.validate(!oldPassword.equals(password), ErrorCode.CAN_NOT_ALLOWED_SAME_PASSWORD);
 
 		user.changePassword(password);
