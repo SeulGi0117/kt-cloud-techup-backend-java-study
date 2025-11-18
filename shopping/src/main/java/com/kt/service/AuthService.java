@@ -39,6 +39,8 @@ public class AuthService {
 		var refreshToken = jwtService.issue(user.getId(), jwtService.getRefreshExpiration());
 
 		return Pair.of(accessToken, refreshToken);
+
+	return	jwtService.issue(user.getId());
 	}
 
 	public void logout() {

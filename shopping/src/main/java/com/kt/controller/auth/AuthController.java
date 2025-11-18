@@ -1,6 +1,5 @@
 package com.kt.controller.auth;
 
-import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kt.common.ApiResult;
 import com.kt.dto.auth.LoginRequest;
-import com.kt.dto.auth.LoginResponse;
 import com.kt.service.AuthService;
 
 import jakarta.validation.Valid;
@@ -25,6 +23,7 @@ public class AuthController {
 		var token = authService.login((request.loginId()), request.password());
 
 		return ApiResult.ok(new LoginResponse(Pair.getFirst(), Pair.getSecond()));
+		return ApiResult.ok(token);
 
 
 	}
