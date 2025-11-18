@@ -1,6 +1,6 @@
 package com.kt.domain.payment;
 
-import com.kt.commone.BaseEntity;
+import com.kt.common.BaseEntity;
 import com.kt.domain.order.Order;
 
 import jakarta.persistence.Entity;

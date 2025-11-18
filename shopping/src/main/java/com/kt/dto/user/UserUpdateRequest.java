@@ -1,8 +1,10 @@
 package com.kt.dto.user;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
+@Schema(name = "UserUpdateRequest")
 public record UserUpdateRequest(
 	@NotBlank
 	String name,

@@ -1,4 +1,4 @@
-package com.kt.commone;
+package com.kt.common;
 
 import org.springframework.http.HttpStatus;
 

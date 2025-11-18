@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.util.Strings;
-import org.aspectj.weaver.ast.Or;
 
-import com.kt.commone.BaseEntity;
-import com.kt.domain.order.Order;
+import com.kt.common.BaseEntity;
 import com.kt.domain.orderproduct.OrderProduct;
 
 import jakarta.persistence.Entity;

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kt.commone.ApiResult;
+import com.kt.common.ApiResult;
 import com.kt.dto.auth.LoginRequest;
 import com.kt.service.AuthService;
 
@@ -22,6 +22,7 @@ public class AuthController {
 	public void login(@RequestBody @Valid LoginRequest request){
 		var token = authService.login((request.loginId()), request.password());
 
+		return ApiResult.ok(new LoginResponse(Pair.getFirst(), Pair.getSecond()));
 		return ApiResult.ok(token);
 
 

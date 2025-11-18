@@ -1,12 +1,13 @@
 package com.kt.service;
 
+import org.springframework.data.util.Pair;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kt.commone.CustomException;
-import com.kt.commone.ErrorCode;
-import com.kt.commone.Preconditions;
+import com.kt.common.CustomException;
+import com.kt.common.ErrorCode;
+import com.kt.common.Preconditions;
 import com.kt.repository.user.UserRepository;
 import com.kt.security.JwtService;
 
@@ -20,8 +21,7 @@ public class AuthService {
 	private final PasswordEncoder passwordEncoder;
 	private final JwtService jwtService;
 
-
-	public void login(String loginId, String password) {
+	public Pair<String, String> login(String loginId, String password) {
 		// loginId로 실제로 유저가 존재한느지 리포지토리에서 찾아와야한다
 		var user = userRepository.findByLoginId(loginId)
 			.orElseThrow(() -> new CustomException(ErrorCode.FAIL_LOGIN));
@@ -35,7 +35,10 @@ public class AuthService {
 
 		// 로그인 성공처리 -> JWT 토큰을 발급 => JWT Service 구현
 		// 헤더에 넣어서 줄수도 있고, body에 넣어서 줄수도 있다(보통선호), 쿠키에 넣어서 줄수도 있다. -> 나머지는 프론트에서 파싱에서 꺼내서 못씀.
+		var accessToken = jwtService.issue(user.getId(), jwtService.getAccessExpiration());
+		var refreshToken = jwtService.issue(user.getId(), jwtService.getRefreshExpiration());
 
+		return Pair.of(accessToken, refreshToken);
 
 	return	jwtService.issue(user.getId());
 	}

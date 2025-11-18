@@ -1,7 +1,4 @@
-package com.kt.commone;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+package com.kt.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

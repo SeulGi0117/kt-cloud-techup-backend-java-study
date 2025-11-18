@@ -1,8 +1,6 @@
 package com.kt.controller.user;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kt.commone.ApiResult;
+import com.kt.common.ApiResult;
+import com.kt.common.SwaggerAssistance;
 import com.kt.dto.user.UserCreateRequest;
 import com.kt.dto.user.UserUpdatePasswordRequest;
 import com.kt.service.UserService;
@@ -25,16 +24,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@Tag(name= "유저", description = "유저관련 API")
+@Tag(name= "User", description = "유저관련 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
 @ApiResponse
-@ApiResponses(value = {
-	@ApiResponse(responseCode = "400", description = "유효성 검사 실패"),
-	@ApiResponse(responseCode = "500", description = "서버 에러 - 백엔드에 바로 문의 바랍니다."),
-})
-public class UserController {
+public class UserController extends SwaggerAssistance {
 	// userservice를  di받아야함
 	// di받는 방식이 생성자 주입 씀 -> 재할당을 금지함 불변유지를 위해 쓴다
 
