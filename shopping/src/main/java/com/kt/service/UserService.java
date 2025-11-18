@@ -2,8 +2,9 @@ package com.kt.service;
 
 import java.time.LocalDateTime;
 
-import com.kt.commone.CustomException;
-import com.kt.commone.ErrorCode;
+import com.kt.common.CustomException;
+import com.kt.common.ErrorCode;
+import com.kt.common.Preconditions;
 import com.kt.dto.user.UserCreateRequest;
 import com.kt.domain.user.User;
 // import com.kt.repository.UserJdbcRepository;
@@ -68,12 +69,10 @@ public class UserService {
 		// 1234 -> 1234 로 바꾸면 예외처리 이런거
 
 		// 유저를 조회해서 비밀번호가 조회한 비번과 새로운 비번이 같은지?
-		if (!user.getPassword().equals(oldPassword)) {
-			throw new CustomException(ErrorCode.DOES_NOT_MATCH_OLD_PASSWORD);
-		}
-		if (oldPassword.equals(password)) {
-			throw new CustomException(ErrorCode.CAN_NOT_ALLOWED_SAME_PASSWORD);
-		}
+		// 패스워드가 이전건과 달라야한다 => 해피한 상황 // 패스워드가 같으면 안되는데 => 해피하지 않은 상황
+		Preconditions.validate(!user.getPassword().equals(oldPassword), ErrorCode.DOES_NOT_MATCH_OLD_PASSWORD);
+		Preconditions.validate(!oldPassword.equals(password), ErrorCode.CAN_NOT_ALLOWED_SAME_PASSWORD);
+
 		user.changePassword(password);
 		// userRepository.save(user); 이렇게 해줘도 된다.
 	}
@@ -84,14 +83,12 @@ public class UserService {
 	}
 
 	public User detail(Long id) {
-		return userRepository.findById(id)
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+		return userRepository.findByIdOrThrow(id, ErrorCode.NOT_FOUND_USER);
 	}
 
 	public void update(Long id, String name, String email, String mobile) {
 		// user 존재 검증
-		var user = userRepository.findById(id)
-			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+		var user = userRepository.findByIdOrThrow(id, ErrorCode.NOT_FOUND_USER);
 		user.update(name, email, mobile);
 	}
 

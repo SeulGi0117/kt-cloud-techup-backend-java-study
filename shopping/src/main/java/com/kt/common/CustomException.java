@@ -1,5 +1,4 @@
-package com.kt.commone;
-import org.springframework.http.HttpStatus;
+package com.kt.common;
 
 import lombok.Getter;
 

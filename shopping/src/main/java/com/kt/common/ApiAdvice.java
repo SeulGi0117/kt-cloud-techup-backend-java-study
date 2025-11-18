@@ -1,4 +1,4 @@
-package com.kt.commone;
+package com.kt.common;
 
 import java.util.Arrays;
 
@@ -8,9 +8,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import io.swagger.v3.oas.annotations.Hidden;
+
 // Error를 공통된 응답으로 처리하는 방
 // Spring에서는 @RestControllerAdvice라는 어노테이션  방법이 있다.
 
+@Hidden // Swagger 를 쓰려면 히든을 붙여줘야한다.
 @RestControllerAdvice
 public class ApiAdvice {
 	// 어떤 예외를 처리할 것인지 정의

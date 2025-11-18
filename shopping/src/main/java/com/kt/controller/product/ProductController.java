@@ -11,17 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kt.commone.ApiResult;
+import com.kt.common.ApiResult;
+import com.kt.common.SwaggerAssistance;
 import com.kt.dto.product.ProductRequest;
 import com.kt.service.ProductService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name ="Product")
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor  // 생성자 주입
-public class ProductController {
+public class ProductController extends SwaggerAssistance {
 	private final ProductService productService;  // 생성자 주입
 
 	@PostMapping

@@ -3,13 +3,12 @@ package com.kt.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kt.commone.ErrorCode;
-import com.kt.commone.Preconditions;
+import com.kt.common.ErrorCode;
+import com.kt.common.Preconditions;
 import com.kt.domain.order.Receiver;
 import com.kt.repository.ProductRepository;
 import com.kt.repository.user.UserRepository;
 
-import org.redisson.Redisson;
 import lombok.RequiredArgsConstructor;
 
 @Service // 서비스 처리하는거라고 알려주는 어노테이션

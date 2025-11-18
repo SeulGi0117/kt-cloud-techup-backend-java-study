@@ -6,8 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.kt.commone.CustomException;
-import com.kt.commone.ErrorCode;
+import com.kt.common.CustomException;
+import com.kt.common.ErrorCode;
 import com.kt.domain.user.User;
 
 // <T, ID>
@@ -26,7 +26,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	Page<User> findAllByNameContationg(String name, Pageable pageable);
 
-	// todo: 25.11.07 실습코드 따라 작성해야함
 	default User findByIdOrThrow(Long id, ErrorCode errorCode){
 		return findById(id).orElseThrow(() -> new CustomException(errorCode));
 	}

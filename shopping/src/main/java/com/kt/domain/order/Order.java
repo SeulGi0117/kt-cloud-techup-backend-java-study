@@ -6,9 +6,8 @@ import java.util.List;
 
 import javax.sound.midi.Receiver;
 
-import com.kt.commone.BaseEntity;
+import com.kt.common.BaseEntity;
 import com.kt.domain.orderproduct.OrderProduct;
-import com.kt.domain.product.Product;
 import com.kt.domain.user.User;
 
 import jakarta.persistence.Embedded;
