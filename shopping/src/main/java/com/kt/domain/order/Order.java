@@ -4,8 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sound.midi.Receiver;
-
 import com.kt.common.BaseEntity;
 import com.kt.domain.orderproduct.OrderProduct;
 import com.kt.domain.user.User;
@@ -29,8 +27,8 @@ public class Order extends BaseEntity {
 	// 순수 자바 객체를 쓰고 싶을때 사용하는 어노테이션
 	private Receiver receiver;
 	@Enumerated(EnumType.STRING)
-	private OrderStatus orderStatus;
-	private LocalDateTime deliveredAy;
+	private OrderStatus status;
+	private LocalDateTime deliveredAt;
 
 	// 연관관계를 생각해보자
 	// 주문(N) <-> 회원(1). 회원은 주문 여러개 가능.
@@ -45,21 +43,33 @@ public class Order extends BaseEntity {
 	@JoinColumn(name = "user_id") // user는 FK 많은 쪽에 생기니까 user_id 참고
 	private User user;
 
-	public Order(Receiver receiver,User user, LocalDateTime deliveredAy, ) {
-		this.receiver = receiver;
-		this.user = user;
-		this.deliveredAy = deliveredAy;
-		this.status = OrderStatus.PENDING;
-	}
 	// [1:N]하나의 오더는 여러개의 상품을 가질 수 있음
 	// [1:N] 하나의 상품은 여러개의 오더를 가질 수 있다.
-
-	@OneToMany
+	// 하나의 주문은 여러명의 회원을 가질 수 있나?(이런경우는 존재하지 않음)
+	@OneToMany(mappedBy = "order")
 	private List<OrderProduct> orderProducts = new ArrayList<>();
 
-	// todo: 주문생성, 주문상태변경, 주문생성완료 되면 재고차감,
-	//  거의 생성의 의미만 있을듯? 배송받는사람 정보 변경, 주문취소,
 
-	// 하나의 주문은 여러명의 회원을 가질 수 있나?(이런경우는 존재하지 않음)
+	private Order(Receiver receiver, User user) {
+		this.receiver = receiver;
+		this.user = user;
+		this.deliveredAt = LocalDateTime.now().plusDays(3);
+		this.status = OrderStatus.PENDING;
+	}
+
+	// 뭘 의미하는건지 잘모르겠음 그래서 정적메서드팩토리 패턴을 사용해서 해보자
+	public static Order create(Receiver receiver, User user) {
+		return new Order(
+			receiver,
+			user
+		);
+	}
+
+	public void mapToOrderProduct(OrderProduct orderProduct) {
+		this.orderProducts.add(orderProduct);
+	}
+	// todo: 주문생성, 주문상태변경, 주문생성완료 되면 재고차감, 배송받는사람 정보 변경, 주문취소
+	//  거의 생성의 의미만 있을듯?
+
 
 }

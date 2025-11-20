@@ -19,11 +19,12 @@ public class AuthController {
 	private final AuthService authService;
 
 	@PostMapping("/login")	// GET mapping 쓰면 URL 다 노출된다. POST를 써야 Body에 넘어간다
-	public void login(@RequestBody @Valid LoginRequest request){
+	public ApiResult<? extends Object> login(@RequestBody @Valid LoginRequest request){
 		var token = authService.login((request.loginId()), request.password());
 
 		return ApiResult.ok(new LoginResponse(Pair.getFirst(), Pair.getSecond()));
 		return ApiResult.ok(token);
+
 
 
 	}
