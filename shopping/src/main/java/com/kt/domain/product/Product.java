@@ -6,16 +6,20 @@ import java.util.List;
 import org.apache.logging.log4j.util.Strings;
 
 import com.kt.common.BaseEntity;
+import com.kt.common.ErrorCode;
+import com.kt.common.Preconditions;
 import com.kt.domain.orderproduct.OrderProduct;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Entity
 @Getter
+@AllArgsConstructor
 public class Product extends BaseEntity {
 	private String name;
 	private Long price;
@@ -30,12 +34,16 @@ public class Product extends BaseEntity {
 	public Product(String name, Long price, Long stock) {
 		// TODO: Preconditons.validate 만들어둔거 쓰면 if문 숨길수있다. 이거 개선해야함
 		// DDD 항상 코드 설계는 이렇게 해야함. 도메인에서 자기가잘 생성 될수있게 방어하는 로직
-		if(Strings.isBlank(name)){
-			throw new IllegalArgumentException("상품명은 필수입니다.");
-		}
-		if(price == null || price < 0){
-			throw new IllegalArgumentException("가격은 0원 이상이어야 합니다.");
-		}
+
+		// if(Strings.isBlank(name)){
+		// 	throw new IllegalArgumentException("상품명은 필수입니다.");
+		// }
+		Preconditions.validate(!Strings.isBlank(name), ErrorCode.INVALID_PARAMETER);
+		// if(price == null || price < 0){
+		// 	throw new IllegalArgumentException("가격은 0원 이상이어야 합니다.");
+		// }
+		Preconditions.validate(!(price == null || price < 0), ErrorCode.INVALID_PARAMETER);
+
 		this.name = name;
 		this.price = price;
 		this.stock = stock;
@@ -75,6 +83,8 @@ public class Product extends BaseEntity {
 	public void increaseStock(Long quantity){
 		this.stock += quantity;
 	}
+
+	// 주문생성시에 해당 재고 수량 제공 가능한지
 	public boolean canProvide(Long quantity) {
 		return this.stock >= quantity;
 	}

@@ -14,18 +14,18 @@ import lombok.Getter;
 public class OrderProduct extends BaseEntity {
 	private Long quantity;
 
-	public OrderProduct(Order order, Product product, Long quantity) {
-		this.order = order;
-		this.product = product;
-		this.quantity = quantity;
-	}
-
 	@ManyToOne
 	@JoinColumn(name = "order_id")
 	private Order order;
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
+
+	public OrderProduct(Order order, Product product, Long quantity) {
+		this.order = order;
+		this.product = product;
+		this.quantity = quantity;
+	}
 
 	// 주문이 생성되면 OrderProduct도 같이 생성되게끔 해야한다.
 	// todo: order, user 작업해야함. crud 작업도 해야함. api랑 문서화까지.

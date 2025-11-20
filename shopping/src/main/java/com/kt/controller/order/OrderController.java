@@ -16,6 +16,10 @@ import jakarta.validation.Valid;
 public class OrderController {
 	private final OrderService orderService;
 
+	public OrderController(OrderService orderService) {
+		this.orderService = orderService;
+	}
+
 	// 주문생성
 	// validation 동작하도록 알려주는 어노테이션
 	@PostMapping

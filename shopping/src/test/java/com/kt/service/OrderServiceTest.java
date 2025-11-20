@@ -24,25 +24,25 @@ class OrderServiceTest {
 	@Autowired
 	private OrderRepository orderRepository;
 
-	@Test
-	void 주문_생성(){
-		// given
-		var user = new userRepository.save();
-		var product = new ProductRepository(
-
-		)
-
-		// when
-		orderderivec.create(
-			user.getId(),
-			product.getId(),
-			""
-		)
-
-		//then
-		var foundedProduct = productRepository.findByIdOrThrow(product.getId());
-		var foundedOrder = orderRepository.findAll()
-	}
+	// @Test
+	// void 주문_생성(){
+	// 	// given
+	// 	var user = new userRepository.save();
+	// 	var product = new ProductRepository(
+	//
+	// 	)
+	//
+	// 	// when
+	// 	orderderivec.create(
+	// 		user.getId(),
+	// 		product.getId(),
+	// 		""
+	// 	)
+	//
+	// 	//then
+	// 	var foundedProduct = productRepository.findByIdOrThrow(product.getId());
+	// 	var foundedOrder = orderRepository.findAll()
+	// }
 
 	@Test
 	void 동시에_100명_주문() {

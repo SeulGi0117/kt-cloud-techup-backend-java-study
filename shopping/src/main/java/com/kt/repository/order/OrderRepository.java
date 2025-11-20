@@ -2,9 +2,9 @@ package com.kt.repository.order;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.kt.domain.user.User;
+import com.kt.domain.order.Order;
 
-public interface OrderRepository extends JpaRepository<User, Long> {
+public interface OrderRepository extends JpaRepository<Order, Long>, OrderRepositoryCustom {
 	// 1. 네이티브 쿼리로 작성하기
 	// 2. jpql로 작성
 	// 3. 쿼리메소드로 어찌저찌 작성

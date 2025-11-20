@@ -4,10 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sound.midi.Receiver;
-
-import net.bytebuddy.asm.Advice;
-
 import com.kt.common.BaseEntity;
 import com.kt.domain.orderproduct.OrderProduct;
 import com.kt.domain.user.User;
@@ -32,7 +28,7 @@ public class Order extends BaseEntity {
 	private Receiver receiver;
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
-	private LocalDateTime deliveredAy;
+	private LocalDateTime deliveredAt;
 
 	// 연관관계를 생각해보자
 	// 주문(N) <-> 회원(1). 회원은 주문 여러개 가능.
@@ -50,13 +46,14 @@ public class Order extends BaseEntity {
 	// [1:N]하나의 오더는 여러개의 상품을 가질 수 있음
 	// [1:N] 하나의 상품은 여러개의 오더를 가질 수 있다.
 	// 하나의 주문은 여러명의 회원을 가질 수 있나?(이런경우는 존재하지 않음)
-	@OneToMany
+	@OneToMany(mappedBy = "order")
 	private List<OrderProduct> orderProducts = new ArrayList<>();
+
 
 	private Order(Receiver receiver, User user) {
 		this.receiver = receiver;
 		this.user = user;
-		this.deliveredAy = LocalDateTime.now().plusDays(3);
+		this.deliveredAt = LocalDateTime.now().plusDays(3);
 		this.status = OrderStatus.PENDING;
 	}
 
@@ -66,7 +63,10 @@ public class Order extends BaseEntity {
 			receiver,
 			user
 		);
+	}
 
+	public void mapToOrderProduct(OrderProduct orderProduct) {
+		this.orderProducts.add(orderProduct);
 	}
 	// todo: 주문생성, 주문상태변경, 주문생성완료 되면 재고차감, 배송받는사람 정보 변경, 주문취소
 	//  거의 생성의 의미만 있을듯?
