@@ -45,6 +45,9 @@ public class User extends BaseEntity {
 	private Gender gender;
 	private LocalDate birthday;
 
+	@Enumerated(EnumType.STRING)
+	private Role role;
+
 	// 매핑테이블
 	// 1 : 1 뭐 이런식으로 만들어줌
 	// 1:2
@@ -52,7 +55,7 @@ public class User extends BaseEntity {
 	private List<Order> orders = new ArrayList<>();
 
 	public User(String loginId, String password, String name, String email, String mobile, Gender gender,
-		LocalDate birthday, LocalDateTime createdAt, LocalDateTime updatedAt) {
+		LocalDate birthday, LocalDateTime createdAt, LocalDateTime updatedAt, Role role) {
 		this.loginId = loginId;
 		this.password = password;
 		this.name = name;
@@ -63,6 +66,39 @@ public class User extends BaseEntity {
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
+
+	public static User normalUser(String loginId, String password, String name, String email, String mobile,
+		Gender gender, LocalDate birthday, LocalDateTime createdAt, LocalDateTime updatedAt, Role user) {
+		return User.normalUser(
+			loginId,
+			password,
+			name,
+			email,
+			mobile,
+			gender,
+			birthday,
+			createdAt,
+			updatedAt,
+			Role.USER
+		);
+	}
+
+	public static User admin(String loginId, String password, String name, String email, String mobile, Gender gender,
+		LocalDate birthday, LocalDateTime createdAt, LocalDateTime updatedAt, Role role) {
+		return User.admin(
+			loginId,
+			password,
+			name,
+			email,
+			mobile,
+			gender,
+			birthday,
+			createdAt,
+			updatedAt,
+			Role.ADMIN
+		);
+	}
+
 	public void changePassword(String password) {
 		this.password = password;
 	}
