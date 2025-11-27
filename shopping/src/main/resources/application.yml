@@ -20,6 +20,8 @@ spring:
         jdbc:
           time_zone: Asia/Seoul
         show_sql: true  # 로컬에서만 써야됨.. 돈 개많이 나옴 aws절대 ㄴㄴ
+        # 배치사이즈 얘는 정말 조심해서 사용해야함.
+#        default_batch_fetch_size: 2 # 카테고리나 대분류 중분류 소분류, 리뷰도 댓글 대댓글. .. 이런 모든 구조에 다 디폴드 배치 사이즈로 적용이 될수있다
     show-sql: true
   data:
     redis:

@@ -6,8 +6,11 @@ import java.util.List;
 
 import javax.sound.midi.Receiver;
 
+import org.hibernate.annotations.BatchSize;
+
 import net.bytebuddy.asm.Advice;
 
+import com.kt.common.BaseChangeStatusEntity;
 import com.kt.common.BaseEntity;
 import com.kt.domain.orderproduct.OrderProduct;
 import com.kt.domain.user.User;
@@ -26,7 +29,7 @@ import lombok.Getter;
 @Getter
 // Order라는건 MySql의 예약어라 그대로 쓰면 에러가 난다.
 @Table(name = "orders")
-public class Order extends BaseEntity {
+public class Order extends BaseChangeStatusEntity {
 	@Embedded
 	// 순수 자바 객체를 쓰고 싶을때 사용하는 어노테이션
 	private Receiver receiver;
@@ -51,6 +54,8 @@ public class Order extends BaseEntity {
 	// [1:N] 하나의 상품은 여러개의 오더를 가질 수 있다.
 	// 하나의 주문은 여러명의 회원을 가질 수 있나?(이런경우는 존재하지 않음)
 	@OneToMany
+	// @BatchSize(size=100) // 쿼리가 무조건 100개가 나간다는 뜻. 3개제품 산건데 100개가 무조건 나감
+	// @BatchSize(size = 2) // in 절이 나가는거 (?, ?) 이렇게
 	private List<OrderProduct> orderProducts = new ArrayList<>();
 
 	private Order(Receiver receiver, User user) {
@@ -70,6 +75,5 @@ public class Order extends BaseEntity {
 	}
 	// todo: 주문생성, 주문상태변경, 주문생성완료 되면 재고차감, 배송받는사람 정보 변경, 주문취소
 	//  거의 생성의 의미만 있을듯?
-
 
 }

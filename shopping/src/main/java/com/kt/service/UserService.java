@@ -5,9 +5,11 @@ import java.time.LocalDateTime;
 import com.kt.common.CustomException;
 import com.kt.common.ErrorCode;
 import com.kt.common.Preconditions;
+import com.kt.domain.orderproduct.OrderProduct;
 import com.kt.dto.user.UserCreateRequest;
 import com.kt.domain.user.User;
 // import com.kt.repository.UserJdbcRepository;
+import com.kt.repository.order.OrderRepository;
 import com.kt.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class UserService {
 	// private final UserJdbcRepository userJdbcRepository;  // ← 생성자 주입(Lombok) 추억속으로 ... ㅃ2
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final OrderRepository orderRepository;
 
 	// 트랜잭션 처리해줘. 어노테이션 달아야함. Entity에는 자카르타 어노테이션을 썼다.(엔티티 자체가 spring bean이 아니라서)
 	// 근데 서비스는? spring bean으로 되어있음. transactional 은 spring 거로 어노테이션 달아야한다.
@@ -103,5 +106,33 @@ public class UserService {
 		// var user = userRepository.findById(id)
 		// 	.orElseThrow(() -> new IllegalArgumentException(("존재하지 않는 회원입니다")));
 		// userRepository.delete(user);
+	}
+
+	public void getOrders(Long id) {
+		var user = userRepository.findByIdOrThrow(id, ErrorCode.NOT_FOUND_USER);
+		var orders = orderRepository.findAllByUserId(user.getId());
+
+		var products = orders.stream()
+		.flatMap(order -> order.getOrderProducts().stream()
+				.map(orderProduct -> orderProduct.getProduct().getName())).toList();
+		// product 할때 1차 캐싱으로 orders 불러와서 status 할때는 JPA가 1차 캐싱있는거 확인하고 가져옴. 쿼리 안나가고
+
+		var status = orders.stream()
+			.flatMap(order -> order.getOrderProducts().stream()
+				.map(orderProduct -> orderProduct.getOrder().getStatus())).toList();
+
+		// Stream 연산과정
+		// 1. 스트림 생성
+		// 2. 중간연산 -> 여러번 가능
+		// 3. 최종 연산 -> 여러번 불가능, 재사용 불가능 -> 람다식을 사용하기때문
+
+		//
+
+
+		user.getOrders() // 실제로 쿼리 하나 나간다, 객체 탐색을 할때 필요해진 순간에 쿼리가 호출될것이다. LAZY라서
+			.forEach(order -> {
+				order.getOrderProducts().size();
+			}); // 찍어보기
+
 	}
 }

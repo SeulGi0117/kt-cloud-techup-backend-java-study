@@ -2,13 +2,18 @@ package com.kt.repository.user;
 
 import java.util.Optional;
 
+import org.hibernate.jpa.spi.NativeQueryTupleTransformer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.kt.common.CustomException;
 import com.kt.common.ErrorCode;
 import com.kt.domain.user.User;
+
+import jakarta.validation.constraints.NotNull;
 
 // <T, ID>
 // T: Entity 클래스=> User
@@ -26,7 +31,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	Page<User> findAllByNameContationg(String name, Pageable pageable);
 
-	default User findByIdOrThrow(Long id, ErrorCode errorCode){
+	// @Query(value = """
+	// 		SELECT DISTINCT u FROM User u
+	// 		LEFT JOIN FETCH u.orders o
+	// 		WHERE u.id = :id
+	// 	""")
+
+	@EntityGraph(attributePaths = "orders") // join 이랑 똑같이 작동한다
+	@NotNull
+	Optional<User> findById(@NotNull Long id);
+
+	default User findByIdOrThrow(Long id, ErrorCode errorCode) {
 		return findById(id).orElseThrow(() -> new CustomException(errorCode));
 	}
 
